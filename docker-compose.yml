@@ -1,0 +1,25 @@
+version: '3'
+services:
+  pg_service:
+    image: postgres:9.6.2-alpine
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment: 
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=docks
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - gem_cache:/usr/local/bundle/gems
+      - node_modules:/app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - pg_service
+volumes: 
+  db_data:
+  gem_cache:
+  node_modules:
